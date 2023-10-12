@@ -61,6 +61,11 @@ class UserSerializer(serializers.ModelSerializer):
             )
         return value
 
+    def update(self, instance, validated_data):
+        validated_data.pop("password", None)
+
+        return super(UserSerializer, self).update(instance, validated_data)
+
     def create(self, validated_data):
         user = User.objects.create(
             email=validated_data["email"],

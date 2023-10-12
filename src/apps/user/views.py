@@ -58,6 +58,12 @@ class UserCrudView(APIView):
 
     @method_decorator(csrf_protect, name="dispatch")
     def patch(self, request, format=None):
+        if "password" in request.data:
+            return Response(
+                {"error": "Password change not allowed through this method."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         serializer = UserSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -68,6 +74,12 @@ class UserCrudView(APIView):
 
     @method_decorator(csrf_protect, name="dispatch")
     def put(self, request, format=None):
+        if "password" in request.data:
+            return Response(
+                {"error": "Password change not allowed through this method."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         serializer = UserSerializer(request.user, data=request.data)
         if serializer.is_valid():
             serializer.save()
